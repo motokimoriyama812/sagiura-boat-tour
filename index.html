@@ -216,6 +216,15 @@
   .section-深袋・高袋エリア { background: #c0392b; }
   .section-帰路・日ノ御碕灯台 { background: #7f8c8d; }
   .section-帰港 { background: #2c3e50; }
+  .photo-marker.video-marker {
+    background: #e74c3c; border: 2px solid #fff;
+    border-radius: 4px; transform: rotate(0deg);
+    width: 22px; height: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .photo-marker.video-marker::after {
+    content: '▶'; color: #fff; font-size: 8px; line-height: 1;
+  }
 
   @media (max-width: 768px) {
     #sidebar { position: absolute; z-index: 500; top: 0; bottom: 0; left: 0; height: 100%; box-shadow: 2px 0 8px rgba(0,0,0,0.2); }
@@ -260,6 +269,7 @@
           <div class="legend-row"><div class="legend-dot" style="background:#c0392b"></div><div class="legend-label">深袋・高袋エリア</div></div>
           <div class="legend-row"><div class="legend-dot" style="background:#7f8c8d"></div><div class="legend-label">帰路・日ノ御碕灯台</div></div>
           <div class="legend-row"><div class="legend-dot" style="background:#2c3e50"></div><div class="legend-label">帰港</div></div>
+          <div class="legend-row" style="margin-top:4px;padding-top:4px;border-top:1px solid #ddd"><div class="legend-dot" style="background:#e74c3c;border-radius:3px;width:16px;height:12px;display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff">▶</div><div class="legend-label">動画</div></div>
         </div>
       </div>
     </div>
@@ -322,9 +332,16 @@ function makeMarker(f) {
     html: `<div class="photo-marker ${secCls}"></div>`,
     iconSize: [20, 20], iconAnchor: [10, 20], popupAnchor: [0, -18]
   });
+  const isVideo = p.is_video;
+  if (isVideo) {
+    icon = L.divIcon({
+      className: '',
+      html: `<div class="photo-marker video-marker ${secCls}"></div>`,
+      iconSize: [22, 16], iconAnchor: [11, 8], popupAnchor: [0, -10]
+    });
+  }
   const m = L.marker([f.geometry.coordinates[1], f.geometry.coordinates[0]], {icon});
   m.featureProps = p;
-  // autoPan: true + autoPanPadding で画面上部切れを防止
   m.bindPopup(() => buildPopup(p), {
     maxWidth: 300, autoPan: true,
     autoPanPaddingTopLeft: L.point(40, 80),

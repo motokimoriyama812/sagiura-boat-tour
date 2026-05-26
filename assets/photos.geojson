@@ -3639,6 +3639,502 @@
         "thumb": "assets/thumbs/SAGI_276.jpg",
         "photo": "assets/photos/SAGI_276.jpg"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.684022,
+          35.450797
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_01",
+        "file": "",
+        "time": "11:42:30",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 11:42:30（0:11）",
+        "description": "海食洞・奇岩群エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "海食洞・奇岩群",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/GKAAarv1Kp4/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/GKAAarv1Kp4/hqdefault.jpg",
+        "youtube_id": "GKAAarv1Kp4",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.688858,
+          35.452269
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_02",
+        "file": "",
+        "time": "11:52:59",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 11:52:59（0:11）",
+        "description": "海食洞・奇岩群エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "海食洞・奇岩群",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/Ik7kgbAVMgw/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/Ik7kgbAVMgw/hqdefault.jpg",
+        "youtube_id": "Ik7kgbAVMgw",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.678344,
+          35.446725
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_03",
+        "file": "",
+        "time": "12:07:21",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 12:07:21（0:21）",
+        "description": "青の洞窟エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "青の洞窟",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/2MffKwlI1IM/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/2MffKwlI1IM/hqdefault.jpg",
+        "youtube_id": "2MffKwlI1IM",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.678178,
+          35.446475
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_04",
+        "file": "",
+        "time": "12:09:12",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 12:09:12（0:21）",
+        "description": "青の洞窟エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "青の洞窟",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/z_6tU5dKR2Q/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/z_6tU5dKR2Q/hqdefault.jpg",
+        "youtube_id": "z_6tU5dKR2Q",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.678131,
+          35.446372
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_05",
+        "file": "",
+        "time": "12:11:43",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 12:11:43（0:22）",
+        "description": "青の洞窟エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "青の洞窟",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/Q_jZD2FzXws/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/Q_jZD2FzXws/hqdefault.jpg",
+        "youtube_id": "Q_jZD2FzXws",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.665025,
+          35.443006
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_06",
+        "file": "",
+        "time": "12:26:49",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 12:26:49（0:01）",
+        "description": "梅灘上陸・昼食エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "梅灘上陸・昼食",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/FOgPi1fnn30/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/FOgPi1fnn30/hqdefault.jpg",
+        "youtube_id": "FOgPi1fnn30",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.664567,
+          35.442642
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_07",
+        "file": "",
+        "time": "12:30:52",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 12:30:52（0:07）",
+        "description": "梅灘上陸・昼食エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "梅灘上陸・昼食",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/PvIYaq20LQg/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/PvIYaq20LQg/hqdefault.jpg",
+        "youtube_id": "PvIYaq20LQg",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.664567,
+          35.442642
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_08",
+        "file": "",
+        "time": "12:31:00",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 12:31:00（0:13）",
+        "description": "梅灘上陸・昼食エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "梅灘上陸・昼食",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/3twvId8M1IM/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/3twvId8M1IM/hqdefault.jpg",
+        "youtube_id": "3twvId8M1IM",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.665681,
+          35.438797
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_09",
+        "file": "",
+        "time": "12:56:35",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 12:56:35（0:21）",
+        "description": "梅灘周辺・柱状節理エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "梅灘周辺・柱状節理",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/Qdx6Ro8H0C4/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/Qdx6Ro8H0C4/hqdefault.jpg",
+        "youtube_id": "Qdx6Ro8H0C4",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.666183,
+          35.444356
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_10",
+        "file": "",
+        "time": "13:16:06",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 13:16:06（0:16）",
+        "description": "梅灘周辺・柱状節理エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "梅灘周辺・柱状節理",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/6x-CC7LvTGw/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/6x-CC7LvTGw/hqdefault.jpg",
+        "youtube_id": "6x-CC7LvTGw",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.661269,
+          35.443614
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_11",
+        "file": "",
+        "time": "13:26:09",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 13:26:09（0:14）",
+        "description": "深袋・高袋エリアエリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "深袋・高袋エリア",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/Z3Mg3XvKXRw/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/Z3Mg3XvKXRw/hqdefault.jpg",
+        "youtube_id": "Z3Mg3XvKXRw",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.653825,
+          35.442117
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_12",
+        "file": "",
+        "time": "13:36:16",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 13:36:16（0:46）",
+        "description": "深袋・高袋エリアエリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "深袋・高袋エリア",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/fab55gjdydw/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/fab55gjdydw/hqdefault.jpg",
+        "youtube_id": "fab55gjdydw",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.646453,
+          35.438519
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_13",
+        "file": "",
+        "time": "13:51:26",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 13:51:26（0:19）",
+        "description": "帰路・日ノ御碕灯台エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "帰路・日ノ御碕灯台",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/jXrcvbrNbaI/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/jXrcvbrNbaI/hqdefault.jpg",
+        "youtube_id": "jXrcvbrNbaI",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.632064,
+          35.437953
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_14",
+        "file": "",
+        "time": "14:02:50",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 14:02:50（0:07）",
+        "description": "帰路・日ノ御碕灯台エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "帰路・日ノ御碕灯台",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/OO-T2b59Jqc/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/OO-T2b59Jqc/hqdefault.jpg",
+        "youtube_id": "OO-T2b59Jqc",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.638139,
+          35.441925
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_15",
+        "file": "",
+        "time": "14:06:10",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 14:06:10（0:14）",
+        "description": "帰路・日ノ御碕灯台エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "帰路・日ノ御碕灯台",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/rot-tAlmckI/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/rot-tAlmckI/hqdefault.jpg",
+        "youtube_id": "rot-tAlmckI",
+        "is_video": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.684892,
+          35.443189
+        ]
+      },
+      "properties": {
+        "id": "VIDEO_16",
+        "file": "",
+        "time": "14:21:57",
+        "time_end": "",
+        "photo_count": 0,
+        "subject": "動画 14:21:57（0:20）",
+        "description": "帰港エリアで撮影された動画。",
+        "categories": [
+          "景観"
+        ],
+        "narration": "",
+        "tourism_note": "",
+        "academic_note": "",
+        "route_section": "帰港",
+        "sub_photos": [],
+        "thumb": "https://i.ytimg.com/vi/b7BHGNKrGSo/hqdefault.jpg",
+        "photo": "https://i.ytimg.com/vi/b7BHGNKrGSo/hqdefault.jpg",
+        "youtube_id": "b7BHGNKrGSo",
+        "is_video": true
+      }
     }
   ]
 }
