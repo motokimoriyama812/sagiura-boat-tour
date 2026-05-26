@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>鷺浦湾 漁船ツアー データベース</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""/>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    font-family: "游ゴシック", "Yu Gothic", "Hiragino Sans", sans-serif;
+  }
+  #app { display: flex; flex-direction: column; height: 100vh; }
+  header {
+    background: #1a4a5e; color: #fff; padding: 8px 14px;
+    display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  }
+  header h1 { margin: 0; font-size: 15px; font-weight: 600; }
+  header .meta { font-size: 11px; opacity: 0.8; }
+  header .toggle-sidebar {
+    margin-left: auto; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+    color: #fff; padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;
+  }
+  header .toggle-sidebar:hover { background: rgba(255,255,255,0.3); }
+
+  #toolbar {
+    background: #f4f6fa; padding: 6px 12px;
+    border-bottom: 1px solid #d8dde6;
+    display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+    font-size: 12px; flex-shrink: 0;
+  }
+  #toolbar .label { color: #555; margin-right: 4px; font-weight: 600; }
+  #toolbar label.cat {
+    display: inline-flex; align-items: center; gap: 3px;
+    padding: 2px 8px; border-radius: 12px;
+    background: #fff; border: 1px solid #c7cfdb;
+    cursor: pointer; user-select: none;
+  }
+  #toolbar label.cat:hover { background: #eef2f8; }
+  #toolbar label.cat input { margin: 0; }
+  #toolbar label.option {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 4px;
+    background: #fff; border: 1px solid #c7cfdb;
+    cursor: pointer; user-select: none;
+  }
+  #toolbar label.option:hover { background: #eef2f8; }
+  #toolbar .stats { margin-left: auto; color: #666; font-size: 11px; }
+  #toolbar button {
+    border: 1px solid #c7cfdb; background: #fff;
+    padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;
+  }
+  #toolbar button:hover { background: #eef2f8; }
+
+  #main { display: flex; flex: 1; min-height: 0; }
+  #sidebar {
+    width: 300px; flex-shrink: 0;
+    background: #fff; border-right: 1px solid #d8dde6;
+    overflow-y: auto;
+    transition: margin-left 0.2s;
+  }
+  #sidebar.hidden { margin-left: -300px; }
+  #sidebar .filter-input {
+    width: 100%; padding: 6px 10px; border: 0; border-bottom: 1px solid #e0e4ea;
+    font-size: 12px; outline: none;
+  }
+  #sidebar .item {
+    display: flex; gap: 8px; padding: 6px 10px;
+    border-bottom: 1px solid #f0f2f6;
+    cursor: pointer; align-items: flex-start;
+  }
+  #sidebar .item:hover { background: #eef4fb; }
+  #sidebar .item.active { background: #d6e4f7; }
+  #sidebar .item img {
+    width: 60px; height: 45px; object-fit: cover; border-radius: 3px; flex-shrink: 0;
+  }
+  #sidebar .item .info { font-size: 11px; line-height: 1.4; min-width: 0; flex: 1; }
+  #sidebar .item .file { font-weight: 600; color: #1a4a5e; font-size: 11px; }
+  #sidebar .item .time { color: #888; font-size: 10px; margin-left: 4px; }
+  #sidebar .item .section-label { color: #1a4a5e; font-size: 9px; background: #e0f0f6; padding: 0 5px; border-radius: 6px; }
+  #sidebar .item .place { color: #555; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #sidebar .item .badges { display: flex; gap: 2px; margin-top: 2px; flex-wrap: wrap; }
+  #sidebar .item .badge {
+    background: #1a4a5e; color: #fff; padding: 0 5px; border-radius: 6px; font-size: 9px;
+  }
+
+  #map { flex: 1; }
+
+  /* ポップアップ — autoPanで画面内に収める */
+  .leaflet-popup-content {
+    margin: 8px 10px; font-size: 12px; line-height: 1.5;
+    width: 280px !important;
+  }
+  .popup-thumb {
+    display: block; width: 260px; height: auto; cursor: pointer;
+    border-radius: 4px; margin-bottom: 6px;
+    transition: opacity 0.15s;
+  }
+  .popup-thumb:hover { opacity: 0.85; }
+  .popup-file { font-weight: 600; color: #1a4a5e; }
+  .popup-time { color: #888; font-size: 11px; margin-left: 4px; }
+  .popup-section { margin-top: 6px; }
+  .popup-section .h { color: #1a4a5e; font-size: 10px; font-weight: 600; display: block; margin-bottom: 2px; }
+  .popup-section .body { color: #333; font-size: 11px; line-height: 1.5; }
+  .popup-narration {
+    background: #f8f4ee; padding: 6px 8px; border-radius: 4px;
+    border-left: 3px solid #c49a3c; margin-top: 6px; font-size: 11px; line-height: 1.5;
+  }
+  .popup-narration .speaker { color: #8b6914; font-weight: 600; font-size: 10px; }
+  .popup-cats {
+    margin-top: 4px;
+    display: flex; flex-wrap: wrap; gap: 3px;
+  }
+  .popup-cats span {
+    background: #1a4a5e; color: #fff;
+    padding: 1px 6px; border-radius: 8px; font-size: 10px;
+  }
+  .popup-route-section {
+    display: inline-block; background: #e0f0f6; color: #1a4a5e;
+    padding: 1px 6px; border-radius: 8px; font-size: 10px; margin-left: 4px;
+  }
+  .popup-photo-count {
+    display: inline-block; background: #eee; color: #666;
+    padding: 1px 6px; border-radius: 8px; font-size: 10px; margin-left: 4px;
+  }
+  .popup-notes { margin-top: 6px; padding-top: 6px; border-top: 1px dashed #c7cfdb; }
+  .popup-note-item { margin-bottom: 4px; }
+  .popup-note-label { font-size: 9px; font-weight: 600; padding: 0 4px; border-radius: 3px; }
+  .popup-note-label.tourism { background: #e8f5e9; color: #2e7d32; }
+  .popup-note-label.academic { background: #e3f2fd; color: #1565c0; }
+  .popup-note-text { font-size: 11px; color: #444; margin-top: 1px; }
+
+  .popup-video { margin-top: 6px; }
+  .popup-video iframe { border-radius: 4px; }
+
+  /* 拡大モーダル */
+  #modal {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.92); z-index: 9999;
+    flex-direction: column; align-items: center; justify-content: center;
+    padding: 12px;
+  }
+  #modal.show { display: flex; }
+  #modal-image-wrap {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    cursor: zoom-out; min-height: 0; width: 100%;
+  }
+  #modal-img {
+    max-width: 100%; max-height: 100%;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.5);
+    border-radius: 4px;
+  }
+  #modal-caption {
+    color: #fff; margin-top: 8px; font-size: 12px;
+    background: rgba(0,0,0,0.5); padding: 6px 14px; border-radius: 4px;
+    text-align: center; max-width: 90%;
+  }
+  #modal-close {
+    position: absolute; top: 8px; right: 12px; z-index: 10;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px;
+  }
+  #modal-close:hover { background: rgba(255,255,255,0.3); }
+  /* サブ写真ナビ */
+  #modal-sub-nav {
+    display: flex; gap: 4px; margin-top: 8px; overflow-x: auto; max-width: 90%;
+  }
+  #modal-sub-nav img {
+    width: 50px; height: 38px; object-fit: cover; border-radius: 3px; cursor: pointer;
+    border: 2px solid transparent; opacity: 0.6;
+  }
+  #modal-sub-nav img.active { border-color: #fff; opacity: 1; }
+  #modal-sub-nav img:hover { opacity: 0.9; }
+
+  /* 凡例 */
+  #legend {
+    position: absolute; bottom: 24px; left: 12px; z-index: 1000;
+    background: rgba(255,255,255,0.92); border: 1px solid #ccc;
+    border-radius: 6px; padding: 8px 10px; font-size: 11px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.15); max-width: 180px;
+  }
+  #legend .legend-title {
+    font-weight: 700; font-size: 11px; color: #333; margin-bottom: 4px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  #legend .legend-toggle {
+    background: none; border: none; cursor: pointer; font-size: 13px; color: #888; padding: 0;
+  }
+  #legend .legend-body { display: flex; flex-direction: column; gap: 2px; }
+  #legend.collapsed .legend-body { display: none; }
+  #legend .legend-row {
+    display: flex; align-items: center; gap: 6px;
+  }
+  #legend .legend-dot {
+    width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid #fff;
+    box-shadow: 0 0 2px rgba(0,0,0,0.3); flex-shrink: 0;
+  }
+  #legend .legend-label { color: #444; font-size: 10px; }
+
+  /* マーカー */
+  .photo-marker {
+    width: 20px; height: 20px;
+    background: #e74c3c; border: 2px solid #fff;
+    border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+  .section-出港・湾内 { background: #3498db; }
+  .section-北前船もやい跡・柏島 { background: #8e44ad; }
+  .section-海食洞・奇岩群 { background: #e67e22; }
+  .section-青の洞窟 { background: #2980b9; }
+  .section-梅灘上陸・昼食 { background: #27ae60; }
+  .section-梅灘周辺・柱状節理 { background: #16a085; }
+  .section-深袋・高袋エリア { background: #c0392b; }
+  .section-帰路・日ノ御碕灯台 { background: #7f8c8d; }
+  .section-帰港 { background: #2c3e50; }
+
+  @media (max-width: 768px) {
+    #sidebar { position: absolute; z-index: 500; top: 0; bottom: 0; left: 0; height: 100%; box-shadow: 2px 0 8px rgba(0,0,0,0.2); }
+    #sidebar.hidden { left: -300px; margin-left: 0; box-shadow: none; }
+    header h1 { font-size: 13px; }
+    header .meta { display: none; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <button class="toggle-sidebar" id="btn-sidebar">☰ 一覧</button>
+    <h1>鷺浦湾 漁船ツアー データベース</h1>
+    <div class="meta">2026-05-17 安部勇船長ガイド ／ 全276枚（GPS実測）73地点 ／ 撮影：守山基樹</div>
+  </header>
+  <div id="toolbar">
+    <span class="label">カテゴリ:</span>
+    <span id="cat-buttons"></span>
+    <button id="all-on">全選択</button>
+    <button id="all-off">全解除</button>
+    <label class="option"><input type="checkbox" id="show-route" checked>航路線</label>
+    <span class="stats" id="stats"></span>
+  </div>
+  <div id="main">
+    <div id="sidebar">
+      <input type="text" class="filter-input" id="sidebar-search" placeholder="🔍 キーワード検索（地名・被写体・カテゴリ）">
+      <div id="sidebar-list"></div>
+    </div>
+    <div id="map">
+      <div id="legend">
+        <div class="legend-title">
+          航路区間 <button class="legend-toggle" id="legend-toggle">▾</button>
+        </div>
+        <div class="legend-body">
+          <div class="legend-row"><div class="legend-dot" style="background:#3498db"></div><div class="legend-label">出港・湾内</div></div>
+          <div class="legend-row"><div class="legend-dot" style="background:#8e44ad"></div><div class="legend-label">北前船もやい跡・柏島</div></div>
+          <div class="legend-row"><div class="legend-dot" style="background:#e67e22"></div><div class="legend-label">海食洞・奇岩群</div></div>
+          <div class="legend-row"><div class="legend-dot" style="background:#2980b9"></div><div class="legend-label">青の洞窟</div></div>
+          <div class="legend-row"><div class="legend-dot" style="background:#27ae60"></div><div class="legend-label">梅灘上陸・昼食</div></div>
+          <div class="legend-row"><div class="legend-dot" style="background:#16a085"></div><div class="legend-label">梅灘周辺・柱状節理</div></div>
+          <div class="legend-row"><div class="legend-dot" style="background:#c0392b"></div><div class="legend-label">深袋・高袋エリア</div></div>
+          <div class="legend-row"><div class="legend-dot" style="background:#7f8c8d"></div><div class="legend-label">帰路・日ノ御碕灯台</div></div>
+          <div class="legend-row"><div class="legend-dot" style="background:#2c3e50"></div><div class="legend-label">帰港</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modal">
+  <button id="modal-close">×</button>
+  <div id="modal-image-wrap">
+    <img id="modal-img" alt="">
+  </div>
+  <div id="modal-sub-nav"></div>
+  <div id="modal-caption"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+<script>
+const CATEGORIES = ["地質・地形","歴史遺構","生態","景観","人物・船上","上陸地点"];
+
+const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom: 19
+});
+const gsiPale = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
+  attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html'>地理院タイル</a>", maxZoom: 18
+});
+const gsiPhoto = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg', {
+  attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html'>地理院タイル</a>", maxZoom: 18
+});
+
+const map = L.map('map', {
+  center: [35.443, 132.665], zoom: 14, layers: [osm]
+});
+L.control.layers({
+  'OpenStreetMap': osm,
+  '地理院タイル(淡色)': gsiPale,
+  '地理院タイル(航空写真)': gsiPhoto
+}, null, {position: 'topright', collapsed: true}).addTo(map);
+
+let allFeatures = [];
+let markers = [];
+let routeLine = null;
+const selectedCats = new Set(CATEGORIES);
+let textFilter = '';
+let activeMarker = null;
+
+function escAttr(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function sectionClass(section) {
+  return 'section-' + (section || '').replace(/[・]/g, '・');
+}
+
+function makeMarker(f) {
+  const p = f.properties;
+  const secCls = sectionClass(p.route_section);
+  const icon = L.divIcon({
+    className: '',
+    html: `<div class="photo-marker ${secCls}"></div>`,
+    iconSize: [20, 20], iconAnchor: [10, 20], popupAnchor: [0, -18]
+  });
+  const m = L.marker([f.geometry.coordinates[1], f.geometry.coordinates[0]], {icon});
+  m.featureProps = p;
+  // autoPan: true + autoPanPadding で画面上部切れを防止
+  m.bindPopup(() => buildPopup(p), {
+    maxWidth: 300, autoPan: true,
+    autoPanPaddingTopLeft: L.point(40, 80),
+    autoPanPaddingBottomRight: L.point(40, 40)
+  });
+  m.on('popupopen', () => { activeMarker = m; highlightSidebarItem(p.id); });
+  return m;
+}
+
+function buildPopup(p) {
+  const cats = (p.categories||[]).map(c => `<span>${escHtml(c)}</span>`).join('');
+  const narrationBlock = p.narration ? `
+    <div class="popup-narration">
+      <span class="speaker">安部勇さんの語り</span><br>${escHtml(p.narration)}
+    </div>` : '';
+  const notesBlock = (p.tourism_note || p.academic_note) ? `
+    <div class="popup-notes">
+      ${p.tourism_note ? `<div class="popup-note-item"><span class="popup-note-label tourism">観光</span><div class="popup-note-text">${escHtml(p.tourism_note)}</div></div>` : ''}
+      ${p.academic_note ? `<div class="popup-note-item"><span class="popup-note-label academic">学術</span><div class="popup-note-text">${escHtml(p.academic_note)}</div></div>` : ''}
+    </div>` : '';
+  const videoBlock = p.youtube_id ? `
+    <div class="popup-video">
+      <iframe width="260" height="146" src="https://www.youtube.com/embed/${escAttr(p.youtube_id)}" frameborder="0" allowfullscreen></iframe>
+    </div>` : '';
+  const countLabel = p.photo_count > 1 ? `<span class="popup-photo-count">${p.photo_count}枚</span>` : '';
+
+  return `
+    <img class="popup-thumb" data-action="open-modal" data-id="${escAttr(p.id)}" src="${escAttr(p.thumb)}" />
+    <div>
+      <span class="popup-file">${escHtml(p.subject)}</span>
+      <span class="popup-time">${escHtml(p.time)}</span>
+      <span class="popup-route-section">${escHtml(p.route_section)}</span>
+      ${countLabel}
+    </div>
+    <div class="popup-section"><span class="h">説明</span><div class="body">${escHtml(p.description)}</div></div>
+    ${narrationBlock}
+    ${notesBlock}
+    ${videoBlock}
+    <div class="popup-cats">${cats}</div>
+  `;
+}
+
+// モーダル
+let modalSubPhotos = [];
+let modalIdx = 0;
+
+document.addEventListener('click', ev => {
+  const trigger = ev.target.closest('[data-action="open-modal"]');
+  if (trigger) {
+    ev.preventDefault();
+    const id = trigger.dataset.id;
+    openModal(id);
+  }
+});
+
+function openModal(id) {
+  const f = allFeatures.find(ff => ff.properties.id === id);
+  if (!f) return;
+  const p = f.properties;
+  modalSubPhotos = (p.sub_photos || [p.file]);
+  modalIdx = 0;
+  showModalPhoto(0);
+  buildSubNav();
+  document.getElementById('modal').classList.add('show');
+}
+
+function showModalPhoto(idx) {
+  modalIdx = idx;
+  const file = modalSubPhotos[idx];
+  document.getElementById('modal-img').src = `assets/photos/${file}`;
+  document.getElementById('modal-caption').textContent = file;
+  document.querySelectorAll('#modal-sub-nav img').forEach((img, i) => {
+    img.classList.toggle('active', i === idx);
+  });
+}
+
+function buildSubNav() {
+  const nav = document.getElementById('modal-sub-nav');
+  if (modalSubPhotos.length <= 1) { nav.innerHTML = ''; return; }
+  nav.innerHTML = modalSubPhotos.map((f, i) =>
+    `<img src="assets/thumbs/${f}" data-idx="${i}" class="${i===0?'active':''}">`
+  ).join('');
+  nav.querySelectorAll('img').forEach(img => {
+    img.addEventListener('click', () => showModalPhoto(parseInt(img.dataset.idx)));
+  });
+}
+
+document.getElementById('modal-close').addEventListener('click', e => {
+  e.stopPropagation();
+  document.getElementById('modal').classList.remove('show');
+});
+document.getElementById('modal-image-wrap').addEventListener('click', () => {
+  document.getElementById('modal').classList.remove('show');
+});
+// キーボードナビ
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('modal').classList.contains('show')) return;
+  if (e.key === 'Escape') document.getElementById('modal').classList.remove('show');
+  if (e.key === 'ArrowRight' && modalIdx < modalSubPhotos.length - 1) showModalPhoto(modalIdx + 1);
+  if (e.key === 'ArrowLeft' && modalIdx > 0) showModalPhoto(modalIdx - 1);
+});
+
+// フィルタ
+function applyFilter() {
+  let visible = 0;
+  markers.forEach(m => {
+    const p = m.featureProps;
+    let show = true;
+    const cats = p.categories || [];
+    const catShow = cats.length === 0 || cats.some(c => selectedCats.has(c));
+    if (!catShow) show = false;
+    if (show && textFilter) {
+      const blob = `${p.id} ${p.subject} ${p.description} ${p.route_section} ${(p.categories||[]).join(' ')} ${p.narration||''}`.toLowerCase();
+      if (!blob.includes(textFilter)) show = false;
+    }
+    if (show) { if (!map.hasLayer(m)) m.addTo(map); visible++; }
+    else { if (map.hasLayer(m)) map.removeLayer(m); }
+  });
+  document.getElementById('stats').textContent = `表示: ${visible} / ${allFeatures.length}`;
+  renderSidebar();
+}
+
+function buildCatButtons(catCounts) {
+  const wrap = document.getElementById('cat-buttons');
+  wrap.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const count = catCounts[cat] || 0;
+    const lbl = document.createElement('label');
+    lbl.className = 'cat';
+    lbl.innerHTML = `<input type="checkbox" data-cat="${cat}" checked>${cat}<span style="color:#999;font-size:10px;">(${count})</span>`;
+    lbl.querySelector('input').addEventListener('change', e => {
+      if (e.target.checked) selectedCats.add(cat); else selectedCats.delete(cat);
+      applyFilter();
+    });
+    wrap.appendChild(lbl);
+  });
+}
+
+document.getElementById('all-on').addEventListener('click', () => {
+  document.querySelectorAll('#cat-buttons input').forEach(i => { i.checked = true; selectedCats.add(i.dataset.cat); });
+  applyFilter();
+});
+document.getElementById('all-off').addEventListener('click', () => {
+  document.querySelectorAll('#cat-buttons input').forEach(i => { i.checked = false; selectedCats.delete(i.dataset.cat); });
+  applyFilter();
+});
+document.getElementById('sidebar-search').addEventListener('input', e => {
+  textFilter = e.target.value.trim().toLowerCase();
+  applyFilter();
+});
+document.getElementById('btn-sidebar').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('hidden');
+});
+
+// サイドバー
+function renderSidebar() {
+  const list = document.getElementById('sidebar-list');
+  const sorted = [...allFeatures].sort((a, b) => (a.properties.time||'').localeCompare(b.properties.time||''));
+  const visibleSet = new Set(markers.filter(m => map.hasLayer(m)).map(m => m.featureProps.id));
+  list.innerHTML = sorted
+    .filter(f => visibleSet.has(f.properties.id))
+    .map(f => {
+      const p = f.properties;
+      const cats = (p.categories||[]).slice(0,3).map(c => `<span class="badge">${c}</span>`).join('');
+      return `
+        <div class="item" data-id="${p.id}">
+          <img src="${p.thumb}" loading="lazy">
+          <div class="info">
+            <span class="file">${escHtml(p.subject).substring(0,30)}</span><span class="time">${p.time}</span>
+            <div class="place"><span class="section-label">${escHtml(p.route_section)}</span></div>
+            <div class="badges">${cats}</div>
+          </div>
+        </div>`;
+    }).join('');
+  list.querySelectorAll('.item').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.dataset.id;
+      const m = markers.find(mk => mk.featureProps.id === id);
+      if (m) { map.setView(m.getLatLng(), Math.max(map.getZoom(), 16), {animate: true}); m.openPopup(); }
+    });
+  });
+}
+
+function highlightSidebarItem(id) {
+  document.querySelectorAll('#sidebar-list .item').forEach(el => {
+    el.classList.toggle('active', el.dataset.id === id);
+  });
+  const target = document.querySelector(`#sidebar-list .item[data-id="${id}"]`);
+  if (target) target.scrollIntoView({block: 'nearest', behavior: 'smooth'});
+}
+
+// 凡例の開閉
+document.getElementById('legend-toggle').addEventListener('click', () => {
+  const legend = document.getElementById('legend');
+  legend.classList.toggle('collapsed');
+  document.getElementById('legend-toggle').textContent = legend.classList.contains('collapsed') ? '▸' : '▾';
+});
+
+// 航路線
+document.getElementById('show-route').addEventListener('change', e => {
+  if (routeLine) { if (e.target.checked) routeLine.addTo(map); else map.removeLayer(routeLine); }
+});
+
+// 起動
+fetch('assets/photos.geojson')
+  .then(r => r.json())
+  .then(gj => {
+    // 航路線を分離
+    const routeFeature = gj.features.find(f => f.properties.type === 'route');
+    allFeatures = gj.features.filter(f => f.properties.type !== 'route');
+
+    // カテゴリ集計
+    const catCounts = {};
+    allFeatures.forEach(f => {
+      (f.properties.categories||[]).forEach(c => catCounts[c] = (catCounts[c]||0) + 1);
+    });
+    buildCatButtons(catCounts);
+
+    // マーカー
+    markers = allFeatures.map(f => makeMarker(f));
+    markers.forEach(m => m.addTo(map));
+
+    // 航路線
+    if (routeFeature) {
+      const coords = routeFeature.geometry.coordinates.map(c => [c[1], c[0]]);
+      routeLine = L.polyline(coords, {
+        color: '#1a4a5e', weight: 2, opacity: 0.5, dashArray: '6,4', interactive: false
+      });
+      routeLine.addTo(map);
+    }
+
+    document.getElementById('stats').textContent = `表示: ${markers.length} / ${markers.length}`;
+    renderSidebar();
+    const group = L.featureGroup(markers);
+    map.fitBounds(group.getBounds().pad(0.1));
+
+    if (window.innerWidth <= 768) {
+      document.getElementById('sidebar').classList.add('hidden');
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert('photos.geojson の読み込みに失敗しました: ' + err);
+  });
+</script>
+</body>
+</html>
