@@ -561,17 +561,7 @@ fetch('assets/photos.geojson')
     buildCatButtons(catCounts);
 
     // マーカー
-    console.log('allFeatures count:', allFeatures.length);
-    markers = [];
-    allFeatures.forEach((f, i) => {
-      try {
-        const m = makeMarker(f);
-        markers.push(m);
-      } catch(e) {
-        console.error('makeMarker failed for feature', i, f.properties.id, e);
-      }
-    });
-    console.log('markers created:', markers.length);
+    markers = allFeatures.map(f => makeMarker(f));
     markers.forEach(m => m.addTo(map));
 
     // 航路線
